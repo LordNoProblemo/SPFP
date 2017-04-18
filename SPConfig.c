@@ -112,7 +112,7 @@ bool isSizeStr(const char* str)
 
 SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 {
-	if(strcmp(varName, "spImagesDirectory"))
+	if(strcmp(varName, "spImagesDirectory")==0)
 	{
 		if(!noWhiteSpace(val))
 			return SP_CONFIG_INVALID_STRING;
@@ -128,7 +128,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 		}
 	}
 
-	if(strcmp(varName , "spImagesPrefix"))
+	if(strcmp(varName , "spImagesPrefix")==0)
 	{
 		if(!noWhiteSpace(val))
 			return SP_CONFIG_INVALID_STRING;
@@ -143,7 +143,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spImagesSuffix"))
+	if(strcmp(varName, "spImagesSuffix")==0)
 	{
 		if(!noWhiteSpace(val))
 			return SP_CONFIG_INVALID_STRING;
@@ -158,9 +158,9 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spImagesSuffix"))
+	if(strcmp(varName, "spImagesSuffix")==0)
 	{
-		if(!noWhiteSpace(val) || !(strcmp(val,JPG)||strcmp(val,PNG)||strcmp(val,GIF)||strcmp(val,BMP)))
+		if(!noWhiteSpace(val) || !(strcmp(val,JPG)==0||strcmp(val,PNG)==0||strcmp(val,GIF)==0||strcmp(val,BMP)==0))
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
@@ -173,7 +173,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spNumOfImages"))
+	if(strcmp(varName, "spNumOfImages")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -188,7 +188,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spPCADimension"))
+	if(strcmp(varName, "spPCADimension")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -203,7 +203,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spPCAFilename"))
+	if(strcmp(varName, "spPCAFilename")==0)
 	{
 		if(!noWhiteSpace(val))
 			return SP_CONFIG_INVALID_STRING;
@@ -218,7 +218,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spNumOfFeatures"))
+	if(strcmp(varName, "spNumOfFeatures")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -233,19 +233,19 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spExtractionMode"))
+	if(strcmp(varName, "spExtractionMode")==0)
 	{
 		if(!noWhiteSpace(val))
 				return SP_CONFIG_INVALID_STRING;
 		if(conf->extractSet)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
-		if(!(strcmp(val,"false")||strcmp(val,"true")))
+		if(!(strcmp(val,"false")==0||strcmp(val,"true")==0))
 			return SP_CONFIG_INVALID_BOOL;
 		conf->extractSet = true;
-		conf->spExtractionMode = strcmp(val,"true");
+		conf->spExtractionMode = (strcmp(val,"true")==0);
 		return SP_CONFIG_SUCCESS;
 	}
-	if(strcmp(varName, "spNumOfSimilarImages"))
+	if(strcmp(varName, "spNumOfSimilarImages")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -260,25 +260,25 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spKDTreeSplitMethod"))
+	if(strcmp(varName, "spKDTreeSplitMethod")==0)
 	{
-		if(!noWhiteSpace(val)||!(strcmp(val,"RANDOM") || strcmp(val,"MAX_SPREAD") || strcmp(val,"INCREMENTAL") ))
+		if(!noWhiteSpace(val)||!(strcmp(val,"RANDOM") ==0|| strcmp(val,"MAX_SPREAD")==0 || strcmp(val,"INCREMENTAL") ==0))
 			return SP_CONFIG_INVALID_STRING;
 		if(conf->spKDTreeSplitMethod != -1)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
 
-			if(strcmp(val,"RANDOM"))
+			if(strcmp(val,"RANDOM")==0)
 				conf->spKDTreeSplitMethod = RANDOM;
 
-			if(strcmp(val, "MAX_SPREAD"))
+			if(strcmp(val, "MAX_SPREAD")==0)
 				conf->spKDTreeSplitMethod = MAX_SPREAD;
 
-			if(strcmp(val, "INCREMENTAL"))
+			if(strcmp(val, "INCREMENTAL")==0)
 				conf->spKDTreeSplitMethod = INCREMENTAL;
 		return SP_CONFIG_SUCCESS;
 
 	}
-	if(strcmp(varName, "spKNN"))
+	if(strcmp(varName, "spKNN")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -293,19 +293,19 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spMinimalGUI"))
+	if(strcmp(varName, "spMinimalGUI")==0)
 	{
 		if(!noWhiteSpace(val))
 				return SP_CONFIG_INVALID_STRING;
 		if(conf->guiSet)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
-		if(!(strcmp(val,"false")||strcmp(val,"true")))
+		if(!(strcmp(val,"false")==0||strcmp(val,"true")==0))
 			return SP_CONFIG_INVALID_BOOL;
 		conf->guiSet = true;
-		conf->spMinimalGUI = strcmp(val,"true");
+		conf->spMinimalGUI = (strcmp(val,"true")==0);
 		return SP_CONFIG_SUCCESS;
 	}
-	if(strcmp(varName, "spLoggerLevel"))
+	if(strcmp(varName, "spLoggerLevel")==0)
 	{
 		if(!isSizeStr(val))
 			return SP_CONFIG_INVALID_INTEGER;
@@ -320,7 +320,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_SUCCESS;
 		}
 	}
-	if(strcmp(varName, "spLoggerFilename"))
+	if(strcmp(varName, "spLoggerFilename")==0)
 	{
 		if(!noWhiteSpace(val))
 			return SP_CONFIG_INVALID_STRING;
@@ -396,7 +396,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	{
 		lines++;
 		trim(buffer);
-		if(strcmp(buffer,"") || buffer[0] == '#')
+		if(strcmp(buffer,"") ==0|| buffer[0] == '#')
 			continue;
 		else if(sscanf(buffer,"%s=%s",varName,val) == EOF)
 		{
@@ -559,7 +559,7 @@ SP_CONFIG_MSG spConfigGetLoggerPath(char* loggerPath, const SPConfig config)
 {
 	if(loggerPath == NULL || config == NULL)
 		return SP_CONFIG_INVALID_ARGUMENT;
-	if(strcmp(config->spLoggerFilename,  "stdout"))
+	if(strcmp(config->spLoggerFilename,  "stdout")==0)
 		sprintf(loggerPath,"%s",config->spLoggerFilename);
 	else
 		sprintf(loggerPath,"%s/%s",config->spImagesDirectory,config->spLoggerFilename);
