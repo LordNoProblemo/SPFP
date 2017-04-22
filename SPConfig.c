@@ -109,7 +109,16 @@ bool isSizeStr(const char* str)
 				return false;
 	return true;
 }
-
+int splitWithEq(char* orig, char* pre, char* suf)
+{
+	int len = strlen(orig), i = 0;
+	for(;orig[i] != '=' && i < len; i++);
+	if(i == len)
+		return -1;
+	if(snprintf(pre,i+1,"%s",orig) < 0 || sscanf(&orig[i+1],"%s",suf) == EOF)
+		return -1;
+	return 0;
+}
 SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 {
 	if(strcmp(varName, "spImagesDirectory")==0)
@@ -398,7 +407,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		trim(buffer);
 		if(strcmp(buffer,"") ==0|| buffer[0] == '#')
 			continue;
-		else if(sscanf(buffer,"%s=%s",varName,val) == EOF)
+		else if(splitWithEq(buffer,varName,val) == -1)
 		{
 			printf(errMes,filename,lines,linErr);
 			spConfigDestroy(config);
