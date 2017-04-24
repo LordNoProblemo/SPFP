@@ -6,14 +6,14 @@
  */
 
 #include<stdlib.h>
-
+#include "SPLogger.h"
 #include "KNN.h"
 #include <stdio.h>
 typedef struct _kdArray
 {
 	SPPoint** pointsArray;
 	int** indexOrdPerDim;
-	int n,d;
+	int n,d, numofPoints;
 
 }KDArray;
 typedef struct kdn KDNode;
@@ -38,22 +38,25 @@ KDArray* init(SPPoint** points, int size)
 {
 	if(size == 0)
 	{
-		printf("No Points Given!");
+		spLoggerPrintInfo("No points given for KDTree!");
+		spLoggerPrintInfo("Returning NULL!");
 		return NULL;
 	}
 	KDArray* ret = (KDArray*)malloc(sizeof(KDArray));
 	if(ret == NULL)
 	{
-		printf("Error while trying to allocating data for KDArray");
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 		return NULL;
 	}
 	ret->pointsArray = points;
 	ret->n = size;
+	ret->numofPoints = size;
 	ret->d = spPointGetDimension(points[0]);
 	ret->indexOrdPerDim = (int**)malloc(ret->d*sizeof(int*));
 	if(ret->indexOrdPerDim == NULL)
 	{
-		printf("Error while trying to allocating data for KDArray");
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
 		destroyArray(ret);
 		return NULL;
 	}
@@ -63,7 +66,8 @@ KDArray* init(SPPoint** points, int size)
 		ret->indexOrdPerDim[i]=(int*)malloc(sizeof(int)*ret->n);
 		if(ret->indexOrdPerDim[i] == NULL)
 		{
-			printf("Error while trying to allocating data for KDArray");
+			spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+			spLoggerPrintInfo("Returning NULL!");
 			destroyArray(ret);
 			return NULL;
 		}
@@ -74,7 +78,7 @@ KDArray* init(SPPoint** points, int size)
 		{
 			int iA = *((int*)a);
 			int iB = *((int*)b);
-			double ret = spPointGetAxisCoor(points[iA],j)-spPointGetAxisCoor(points[iB],j);
+			double ret = spPointGetAxisCoor(points[iA],i)-spPointGetAxisCoor(points[iB],i);
 			if(ret>0)
 				return 1;
 			if(ret< 0 )
@@ -94,17 +98,25 @@ KDArray** split(KDArray* KDA, int coor)
 	int size2 = KDA->n - size1;
 	KDArray** ret = (KDArray**)malloc(2*sizeof(KDArray*));
 	if(ret == NULL)
+	{
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 		return NULL;
+	}
 	ret[0] = (KDArray*)malloc(sizeof(KDArray));
 	if(ret[0] == NULL)
 	{
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 		free(ret);
 		return NULL;
 	}
 	ret[1] = (KDArray*)malloc(sizeof(KDArray));
 	if(ret[1] == NULL)
 	{
-		free(ret[1]);
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
+		destroyArray(ret[0]);
 		free(ret);
 		return NULL;
 	}
@@ -114,26 +126,39 @@ KDArray** split(KDArray* KDA, int coor)
 	ret[0]->pointsArray = points;
 	ret[0]->n=size1;
 	ret[0]->d = d;
+	ret[0]->numofPoints = KDA->numofPoints;
 	ret[1]->pointsArray = points;
 	ret[1]->n=size2;
 	ret[1]->d = d;
+	ret[1]->numofPoints = KDA->numofPoints;
 	ret[0]->indexOrdPerDim = (int**)malloc(d*sizeof(int*));
 	ret[1]->indexOrdPerDim = (int**)malloc(d*sizeof(int*));
 	if(ret[1]->indexOrdPerDim == NULL || ret[0]->indexOrdPerDim ==NULL)
 	{
+		spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 		destroyArray(ret[0]);
 		destroyArray(ret[1]);
 		free(ret);
 		return NULL;
 	}
 	int i = 0 ;
+	int leftIndexes[KDA->numofPoints];
+	for(;i<n;i++){
+		if(i<size1)
+			leftIndexes[indexOrd[coor][i]] = 1;
+		else
+			leftIndexes[indexOrd[coor][i]] = 0;
+	}
 	double leftBound = spPointGetAxisCoor(points[indexOrd[coor][size1-1]],coor);
-	for(;i<d;i++)
+	for(i=0;i<d;i++)
 	{
 		ret[0]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size1);
 		ret[1]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size2);
 		if(ret[0]->indexOrdPerDim[i]==NULL || ret[1]->indexOrdPerDim[i] == NULL)
 		{
+			spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
+			spLoggerPrintInfo("Returning NULL!");
 			destroyArray(ret[0]);
 			destroyArray(ret[1]);
 			free(ret);
@@ -142,14 +167,19 @@ KDArray** split(KDArray* KDA, int coor)
 		int k1 = 0,k2 = 0,j = 0;
 		for(;j<n;j++)
 		{
-			if(spPointGetAxisCoor(points[indexOrd[i][j]],coor)<=leftBound)
+			if(spPointGetAxisCoor(points[indexOrd[i][j]],coor)<leftBound)
 			{
-				ret[0]->indexOrdPerDim[i][k1] = j;
+				ret[0]->indexOrdPerDim[i][k1] = indexOrd[i][j];
+				k1++;
+			}
+			else if(spPointGetAxisCoor(points[indexOrd[i][j]],coor) == leftBound && leftIndexes[indexOrd[i][j]] == 1)
+			{
+				ret[0]->indexOrdPerDim[i][k1] = indexOrd[i][j];
 				k1++;
 			}
 			else
 			{
-				ret[1]->indexOrdPerDim[i][k2] = j;
+				ret[1]->indexOrdPerDim[i][k2] = indexOrd[i][j];
 				k2++;
 			}
 		}
@@ -178,10 +208,13 @@ void destroyKDN(KDNode* KDN)
 }
 KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor)
 {
+	if(KDA == NULL)
+		return NULL;
 	KDNode* ret = (KDNode*)malloc(sizeof(KDNode));
 	if(ret==NULL)
 	{
-		printf("Error while allocating data for KDTree");
+		spLoggerPrintError("Error while trying to allocating data for KDTree",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 		return NULL;
 	}
 	if(KDA->n == 1)
@@ -193,7 +226,8 @@ KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor)
 		ret->Data = spPointCopy(KDA->pointsArray[KDA->indexOrdPerDim[0][0]]);
 		if(ret->Data == NULL)
 		{
-			printf("Error while allocating data for KDTree");
+			spLoggerPrintError("Error while trying to allocating data for KDTree",__FILE__,__func__,__LINE__);
+			spLoggerPrintInfo("Returning NULL!");
 			destroyKDN(ret);
 			return NULL;
 		}
@@ -219,7 +253,7 @@ KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor)
 		}
 	}
 	else if(method == INCREMENTAL)
-		ret->Dim = lastCoor%d;
+		ret->Dim = (lastCoor+1)%d;
 	else
 		ret->Dim = rand()%d;
 	KDArray** splitArray = split(KDA,ret->Dim);
@@ -256,7 +290,10 @@ bool isLeaf(KDNode* KDN)
 void KNNFromTree(KDNode* KDTree, SPPoint* pnt, SPBPQueue* ret)
 {
 	if(KDTree == NULL)
-		return;
+	{
+		spLoggerPrintWarning("KDTree given for KNN is NULL",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Finishing KNN!");
+	}
 	if(isLeaf(KDTree))
 	{
 		spBPQueueEnqueue(ret, spPointGetIndex(KDTree->Data),spPointL2SquaredDistance(KDTree->Data,pnt));
@@ -282,7 +319,10 @@ SPBPQueue* KNN(SPPoint** points,SPPoint* pnt, int k, SPLIT_METHOD method, int si
 {
 	SPBPQueue* ret = spBPQueueCreate(k);
 	if(ret == NULL)
-		return NULL;
+	{
+	spLoggerPrintError("Error while trying to allocating data for Queue!",__FILE__,__func__,__LINE__);
+	spLoggerPrintInfo("Returning NULL!");
+	}
 	KDNode* KDTree = buildFromPoints(points, method,size);
 	if(KDTree == NULL)
 	{
@@ -291,5 +331,4 @@ SPBPQueue* KNN(SPPoint** points,SPPoint* pnt, int k, SPLIT_METHOD method, int si
 	}
 	KNNFromTree(KDTree, pnt, ret);
 	return ret;
-
 }
