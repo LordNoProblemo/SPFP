@@ -293,6 +293,7 @@ void KNNFromTree(KDNode* KDTree, SPPoint* pnt, SPBPQueue* ret)
 	{
 		spLoggerPrintWarning("KDTree given for KNN is NULL",__FILE__,__func__,__LINE__);
 		spLoggerPrintInfo("Finishing KNN!");
+		return;
 	}
 	if(isLeaf(KDTree))
 	{
