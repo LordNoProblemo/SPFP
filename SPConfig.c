@@ -412,7 +412,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	{
 		lines++;
 		trim(buffer);
-		if(strcmp(buffer,"") ==0|| buffer[0] == '#')
+		if(buffer[0] ==' '|| buffer[0] == '#')
 			continue;
 		else if(splitWithEq(buffer,varName,val) == -1)
 		{
