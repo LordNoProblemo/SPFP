@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CC = gcc
 CPP = g++
 #put all your object files here

@@ -4,19 +4,13 @@
  *  Created on: Apr 15, 2017
  *      Author: nimro
  */
+
+#include <stdlib.h>
+#include "SPLogger.h"
+#include "KNN.h"
+#include <stdio.h>
 #include "KDTree.h"
 
-#include<stdlib.h>
-#include "SPLogger.h"
-#include <stdio.h>
-typedef struct _kdArray
-{
-	SPPoint** pointsArray;
-	int** indexOrdPerDim;
-	int n,d, numofPoints;
-
-}KDArray;
-typedef struct kdn KDNode;
 
 void destroyArray(KDArray* ar)
 {
@@ -187,13 +181,8 @@ KDArray** split(KDArray* KDA, int coor)
 	return ret;
 }
 
-struct kdn
-{
-	int Dim;
-	double Val;
-	KDNode* Left,*Right;
-	SPPoint* Data;
-};
+
+>>>>>>> branch 'master' of https://github.com/LordNoProblemo/SPFP.git
 void destroyKDN(KDNode* KDN)
 {
 	if(KDN == NULL)
