@@ -95,7 +95,7 @@ bool noWhiteSpace(const char* str)
 		return false;
 	int i = 0;
 	for(;i<len;i++)
-		if(str[i] == ' ')
+		if(str[i] == ' ' || str[i] == '=')
 			return false;
 	return true;
 }
