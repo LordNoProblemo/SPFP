@@ -5,8 +5,8 @@
  *      Author: nimro
  */
 
-#include "../KDTree.c"
-
+#include "../KDTree.h"
+#include "../KNN.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>

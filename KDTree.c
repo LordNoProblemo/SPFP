@@ -9,14 +9,8 @@
 #include "SPLogger.h"
 #include "KNN.h"
 #include <stdio.h>
-typedef struct _kdArray
-{
-	SPPoint** pointsArray;
-	int** indexOrdPerDim;
-	int n,d, numofPoints;
+#include "KDTree.h"
 
-}KDArray;
-typedef struct kdn KDNode;
 
 void destroyArray(KDArray* ar)
 {
@@ -187,13 +181,7 @@ KDArray** split(KDArray* KDA, int coor)
 	return ret;
 }
 
-struct kdn
-{
-	int Dim;
-	double Val;
-	KDNode* Left,*Right;
-	SPPoint* Data;
-};
+
 void destroyKDN(KDNode* KDN)
 {
 	if(KDN == NULL)
