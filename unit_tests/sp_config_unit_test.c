@@ -24,7 +24,7 @@ static bool checkValidConfig()
 	}
 	char Path[1025];
 	msg = spConfigGetPCAPath(Path,con);
-	if(msg != SP_CONFIG_SUCCESS || strcpm(Path,"./images/pca.yml")!= 0)
+	if(msg != SP_CONFIG_SUCCESS || strcmp(Path,"./images/pca.yml")!= 0)
 	{
 		spConfigDestroy(con);
 		return false;
