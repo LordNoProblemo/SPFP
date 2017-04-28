@@ -170,7 +170,7 @@ SP_CONFIG_MSG spConfigGetImagePath(char* imagePath, const SPConfig config,
  * @param imagePath - an address to store the result in, it must contain enough space.
  * @param config - the configuration structure
  * @return
- *  - SP_CONFIG_INVALID_ARGUMENT - if imagePath == NULL or config == NULL
+ *  - SP_CONFIG_INVALID_ARGUMENT - if pcaPath == NULL or config == NULL
  *  - SP_CONFIG_SUCCESS - in case of success
  */
 SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config);

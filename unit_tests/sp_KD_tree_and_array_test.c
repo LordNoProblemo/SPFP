@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 ///*
 // * sp_KD_tree_and_array_test.c
 // *
@@ -259,7 +259,7 @@
 //	RUN_TEST(TestKNN);
 //	return 0;
 //}
-=======
+
 /*
  * sp_KD_tree_and_array_test.c
  *
@@ -520,4 +520,4 @@ int main() {
 	RUN_TEST(TestKNN);
 	return 0;
 }
->>>>>>> branch 'master' of https://github.com/LordNoProblemo/SPFP.git
+

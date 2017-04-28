@@ -394,17 +394,23 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
 		if(strcmp(filename,"spcbir.config") != 0)
 		{
-			printf("The configuration file %s couldn�t be open\n",filename);
+			printf("The configuration file %s couldn't be open\n",filename);
 		}
 		else
-			printf("The default configuration file spcbir.config couldn�t be open\n");
+			printf("The default configuration file spcbir.config couldn't be open\n");
 		return NULL;
 	}
 	char buffer[1025];
 	char varName[1025];
 	char val[1025];
 	int lines = 0;
-	SPConfig config = (SPConfig)malloc(sizeof(SPConfig));
+	SPConfig config = (SPConfig)malloc(sizeof(struct sp_config_t));
+	if(config == NULL)
+	{
+		*msg = SP_CONFIG_ALLOC_FAIL;
+		fclose(fp);
+		return NULL;
+	}
 	config->extractSet = false;
 	config->guiSet=false;
 	SP_CONFIG_MSG tempMsg;
@@ -412,7 +418,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	{
 		lines++;
 		trim(buffer);
-		if(buffer[0] ==' '|| buffer[0] == '#')
+		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#')
 			continue;
 		else if(splitWithEq(buffer,varName,val) == -1)
 		{
@@ -508,7 +514,7 @@ SP_CONFIG_MSG spConfigGetImagePath(char* imagePath, const SPConfig config, int i
 		return SP_CONFIG_INVALID_ARGUMENT;
 	if(index >= config->spNumOfImages)
 		return SP_CONFIG_INDEX_OUT_OF_RANGE;
-	sprintf(imagePath,"%s%d%s",config->spImagesPrefix,index,config->spImagesSuffix);
+	sprintf(imagePath,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,config->spImagesSuffix);
 	return SP_CONFIG_SUCCESS;
 
 }
@@ -516,7 +522,7 @@ SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config)
 {
 	if(pcaPath == NULL || config == NULL)
 		return SP_CONFIG_INVALID_ARGUMENT;
-	sprintf(pcaPath,"%s/%s",config->spImagesDirectory,config->spPCAFilename);
+	sprintf(pcaPath,"%s%s",config->spImagesDirectory,config->spPCAFilename);
 	return SP_CONFIG_SUCCESS;
 }
 void spConfigDestroy(SPConfig config)
