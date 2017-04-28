@@ -394,10 +394,17 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
 		if(strcmp(filename,"spcbir.config") != 0)
 		{
+<<<<<<< HEAD
 			printf("The configuration file %s couldn't be open\n",filename);
 		}
 		else
 			printf("The default configuration file spcbir.config couldn't be open\n");
+=======
+			printf("The configuration file %s couldn�t be open\n",filename);
+		}
+		else
+			printf("The default configuration file spcbir.config couldn�t be open\n");
+>>>>>>> origin/master
 		return NULL;
 	}
 	char buffer[1025];
