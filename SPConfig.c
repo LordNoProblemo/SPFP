@@ -47,7 +47,7 @@ void SetDefaults(SPConfig conf)
 	assert(conf != NULL);
 	if(conf->extractSet == false)
 		conf->spExtractionMode = true;
-	if(conf->spKDTreeSplitMethod == -1)
+	if(conf->spKDTreeSplitMethod < 0)
 		conf->spKDTreeSplitMethod = MAX_SPREAD;
 	if(conf->spKNN == 0)
 		conf->spKNN = 1;
@@ -69,9 +69,9 @@ void SetDefaults(SPConfig conf)
 
 void trim(char* str)
 {
-	int len =1025;
+	unsigned int len =1025;
 	char ret[1025];
-	int i = 0;
+	unsigned int i = 0;
 	while(i < len && str[i]==' ')
 		i++;
 	if(i==strlen(str))
@@ -273,7 +273,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 	{
 		if(!noWhiteSpace(val)||!(strcmp(val,"RANDOM") ==0|| strcmp(val,"MAX_SPREAD")==0 || strcmp(val,"INCREMENTAL") ==0))
 			return SP_CONFIG_INVALID_STRING;
-		if(conf->spKDTreeSplitMethod != -1)
+		if(conf->spKDTreeSplitMethod >= 0)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
 
 			if(strcmp(val,"RANDOM")==0)
@@ -394,17 +394,23 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
 		if(strcmp(filename,"spcbir.config") != 0)
 		{
-			printf("The configuration file %s couldn’t be open\n",filename);
+			printf("The configuration file %s couldn't be open\n",filename);
 		}
 		else
-			printf("The default configuration file spcbir.config couldn’t be open\n");
+			printf("The default configuration file spcbir.config couldn't be open\n");
 		return NULL;
 	}
 	char buffer[1025];
 	char varName[1025];
 	char val[1025];
 	int lines = 0;
-	SPConfig config = (SPConfig)malloc(sizeof(SPConfig));
+	SPConfig config = (SPConfig)malloc(sizeof(struct sp_config_t));
+	if(config == NULL)
+	{
+		*msg = SP_CONFIG_ALLOC_FAIL;
+		fclose(fp);
+		return NULL;
+	}
 	config->extractSet = false;
 	config->guiSet=false;
 	SP_CONFIG_MSG tempMsg;
@@ -412,7 +418,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	{
 		lines++;
 		trim(buffer);
-		if(buffer[0] ==' '|| buffer[0] == '#')
+		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#')
 			continue;
 		else if(splitWithEq(buffer,varName,val) == -1)
 		{

@@ -77,7 +77,7 @@ SP_LOGGER_MSG spLoggerPrintMsg(const char * msg)
 	strcat(whole_msg, "\n");
 	if(logger == NULL)
 		return SP_LOGGER_UNDIFINED;
-	int out_size = fwrite(whole_msg, 1,strlen(whole_msg), logger->outputChannel);
+	unsigned int out_size = fwrite(whole_msg, 1,strlen(whole_msg), logger->outputChannel);
 	free(whole_msg);
 	if(out_size < strlen(whole_msg))
 		return SP_LOGGER_WRITE_FAIL;

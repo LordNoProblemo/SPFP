@@ -182,7 +182,7 @@ KDArray** split(KDArray* KDA, int coor)
 }
 
 
->>>>>>> branch 'master' of https://github.com/LordNoProblemo/SPFP.git
+
 void destroyKDN(KDNode* KDN)
 {
 	if(KDN == NULL)
