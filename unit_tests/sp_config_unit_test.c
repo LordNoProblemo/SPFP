@@ -48,7 +48,7 @@ static bool testInvalidConfigs()
 {
 	SPConfig con;
 	SP_CONFIG_MSG msg;
-	con = spConfigCreate("invalidIntConfig.txt",msg);
+	con = spConfigCreate("invalidIntConfig.txt",&msg);
 	if(con != NULL)
 	{
 		spConfigDestroy(con);
@@ -58,7 +58,7 @@ static bool testInvalidConfigs()
 	{
 		return false;
 	}
-	con = spConfigCreate("InValidSpaceConfig.txt",msg);
+	con = spConfigCreate("InValidSpaceConfig.txt",&msg);
 	if(con != NULL)
 	{
 		spConfigDestroy(con);
@@ -68,7 +68,7 @@ static bool testInvalidConfigs()
 	{
 		return false;
 	}
-	con = spConfigCreate("MissingConfig.txt",msg);
+	con = spConfigCreate("MissingConfig.txt",&msg);
 	if(con != NULL)
 	{
 		spConfigDestroy(con);
