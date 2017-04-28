@@ -11,7 +11,19 @@
 #include <stdio.h>
 #include "KDTree.h"
 
-
+SPPoint** pointsToCompare;
+int coorToCompare;
+int comp(const void * a, const void * b)
+{
+	int iA = *((int*)a);
+	int iB = *((int*)b);
+	double ret = spPointGetAxisCoor(pointsToCompare[iA],coorToCompare)-spPointGetAxisCoor(pointsToCompare[iB],coorToCompare);
+	if(ret>0)
+		return 1;
+	if(ret< 0 )
+		return -1;
+	return 0;
+}
 void destroyArray(KDArray* ar)
 {
 	if(ar == NULL)
@@ -55,6 +67,7 @@ KDArray* init(SPPoint** points, int size)
 		return NULL;
 	}
 	int i = 0;
+	pointsToCompare = points;
 	for(;i<ret->d;i++)
 	{
 		ret->indexOrdPerDim[i]=(int*)malloc(sizeof(int)*ret->n);
@@ -68,17 +81,7 @@ KDArray* init(SPPoint** points, int size)
 		int j = 0;
 		for(;j<ret->n;j++)
 			ret->indexOrdPerDim[i][j] = j;
-		int comp(const void * a, const void * b)
-		{
-			int iA = *((int*)a);
-			int iB = *((int*)b);
-			double ret = spPointGetAxisCoor(points[iA],i)-spPointGetAxisCoor(points[iB],i);
-			if(ret>0)
-				return 1;
-			if(ret< 0 )
-				return -1;
-			return 0;
-		}
+		coorToCompare = i;
 		qsort(ret->indexOrdPerDim[i],ret->n,sizeof(int),comp);
 	}
 	return ret;

@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "unit_test_util.h"
 
 static bool checkValidConfig()
@@ -22,7 +23,12 @@ static bool checkValidConfig()
 		spConfigDestroy(con);
 		return false;
 	}
-	char Path[1025];
+	char* Path = (char*)malloc(1025);
+	if(Path == NULL)
+	{
+		spConfigDestroy(con);
+		return false;
+	}
 	msg = spConfigGetPCAPath(Path,con);
 	if(msg != SP_CONFIG_SUCCESS || strcmp(Path,"./images/pca.yml")!= 0)
 	{
