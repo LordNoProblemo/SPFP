@@ -20,7 +20,6 @@ static bool checkValidConfig()
 		return false;
 	if(msg != SP_CONFIG_SUCCESS)
 	{
-		spConfigDestroy(con);
 		return false;
 	}
 	char* Path = (char*)malloc(1025);
@@ -29,24 +28,31 @@ static bool checkValidConfig()
 		spConfigDestroy(con);
 		return false;
 	}
+	printf("Config created\n");
 	msg = spConfigGetPCAPath(Path,con);
 	if(msg != SP_CONFIG_SUCCESS || strcmp(Path,"./images/pca.yml")!= 0)
 	{
+		free(Path);
 		spConfigDestroy(con);
 		return false;
 	}
+	printf("Path created\n");
 	int level = spConfigGetLoggerLevel(con,&msg);
 	if(msg != SP_CONFIG_SUCCESS || level != 3)
 	{
+		free(Path);
 		spConfigDestroy(con);
 		return false;
 	}
+	printf("level ok\n");
 	msg = spConfigGetLoggerPath(Path,con);
 	if(msg != SP_CONFIG_SUCCESS || strcmp(Path,"stdout")!=0)
 	{
+		free(Path);
 		spConfigDestroy(con);
 		return false;
 	}
+	printf("Path ok\n");
 	spConfigDestroy(con);
 	return true;
 }

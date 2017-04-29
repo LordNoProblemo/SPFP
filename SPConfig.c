@@ -66,18 +66,29 @@ void SetDefaults(SPConfig conf)
 	if(conf->spLoggerFilename == NULL)
 		conf->spLoggerFilename = "stdout";
 }
-
+void setZeros(SPConfig con)
+{
+	con->spLoggerLevel = 0;
+	con->spKNN = 0;
+	con->spNumOfSimilarImages =0;
+	con->spNumOfFeatures = 0;
+	con->spPCADimension = 0;
+	con ->spNumOfImages = 0;
+}
 void trim(char* str)
 {
 	unsigned int len =1025;
 	char ret[1025];
 	unsigned int i = 0;
+	for(;i<1025;i++)
+		ret[i] = '\0';
+	i = 0;
 	while(i < len && str[i]==' ')
 		i++;
 	if(i==strlen(str))
 		return;
 	int j = strlen(str);
-	while(str[j-1] == ' ' || str[j-1] =='\n')
+	while(str[j-1] == ' ' || str[j-1] =='\n' || str[j-1] =='\0')
 		j--;
 	int k = i;
 	for(;k<j;k++)
@@ -400,9 +411,27 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			printf("The default configuration file spcbir.config couldn't be open\n");
 		return NULL;
 	}
-	char buffer[1025];
-	char varName[1025];
-	char val[1025];
+	char* buffer = (char*)malloc(1025);
+	if(buffer == NULL)
+	{
+		*msg = SP_CONFIG_ALLOC_FAIL;
+		return NULL;
+	}
+	char* varName=(char*)malloc(1025);
+	if(varName == NULL)
+	{
+		free(buffer);
+		*msg = SP_CONFIG_ALLOC_FAIL;
+		return NULL;
+	}
+	char* val=(char*)malloc(1025);
+	if(val == NULL)
+	{
+		free(buffer);
+		free(varName);
+		*msg = SP_CONFIG_ALLOC_FAIL;
+		return NULL;
+	}
 	int lines = 0;
 	SPConfig config = (SPConfig)malloc(sizeof(struct sp_config_t));
 	if(config == NULL)
@@ -411,15 +440,26 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		fclose(fp);
 		return NULL;
 	}
+	setZeros(config);
 	config->extractSet = false;
 	config->guiSet=false;
 	SP_CONFIG_MSG tempMsg;
+	int i = 0;
 	while(fgets(buffer,1025,fp)!=NULL)
 	{
 		lines++;
 		trim(buffer);
 		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#')
+		{
+			i=0;
+			for(;i<1025;i++)
+			{
+				buffer[i] = '\0';
+				varName[i] = '\0';
+				val[i] = '\0';
+			}
 			continue;
+		}
 		else if(splitWithEq(buffer,varName,val) == -1)
 		{
 			printf(errMes,filename,lines,linErr);
@@ -438,7 +478,15 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				printf(errMes,filename,lines,valErr);
 			return NULL;
 		}
+		i=0;
+		for(;i<1025;i++)
+		{
+			buffer[i] = '\0';
+			varName[i] = '\0';
+			val[i] = '\0';
+		}
 	}
+
 	SetDefaults(config);
 	tempMsg = checkConfig(config,lines, filename);
 	if(tempMsg != SP_CONFIG_SUCCESS)
@@ -447,7 +495,10 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = tempMsg;
 		return NULL;
 	}
+	*msg = SP_CONFIG_SUCCESS;
 	fclose(fp);
+	free(buffer);
+	free(varName);
 	return config;
 }
 
@@ -582,7 +633,7 @@ SP_CONFIG_MSG spConfigGetLoggerPath(char* loggerPath, const SPConfig config)
 	if(loggerPath == NULL || config == NULL)
 		return SP_CONFIG_INVALID_ARGUMENT;
 	if(strcmp(config->spLoggerFilename,  "stdout")==0)
-		sprintf(loggerPath,"%s",config->spLoggerFilename);
+		sprintf(loggerPath,"%s","stdout");
 	else
 		sprintf(loggerPath,"%s/%s",config->spImagesDirectory,config->spLoggerFilename);
 	return SP_CONFIG_SUCCESS;
