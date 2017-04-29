@@ -143,7 +143,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spImagesDirectory = (char*)malloc(1025);
 			if(conf->spImagesDirectory == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spImagesDirectory,"%s",val);
+			sprintf(conf->spImagesDirectory,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
@@ -159,7 +159,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spImagesPrefix = (char*)malloc(1025);
 			if(conf->spImagesPrefix == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spImagesPrefix,"%s",val);
+			sprintf(conf->spImagesPrefix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
@@ -174,7 +174,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spImagesSuffix = (char*)malloc(1025);
 			if(conf->spImagesSuffix == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spImagesSuffix,"%s",val);
+			sprintf(conf->spImagesSuffix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
@@ -189,7 +189,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spImagesSuffix = (char*)malloc(1025);
 			if(conf->spImagesSuffix == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spImagesSuffix,"%s",val);
+			sprintf(conf->spImagesSuffix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
@@ -234,7 +234,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spPCAFilename = (char*)malloc(1025);
 			if(conf->spPCAFilename == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spPCAFilename,"%s",val);
+			sprintf(conf->spPCAFilename,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
@@ -351,7 +351,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			conf->spLoggerFilename = (char*)malloc(1025);
 			if(conf->spLoggerFilename == NULL)
 				return SP_CONFIG_ALLOC_FAIL;
-			sscanf(conf->spLoggerFilename,"%s",val);
+			sprintf(conf->spLoggerFilename,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
 	}
