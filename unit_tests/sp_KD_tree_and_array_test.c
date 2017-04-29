@@ -515,9 +515,9 @@ static bool TestKNN()
 	destroyPointsArray(points,5);
 	return true;
 }
-int main() {
+/*int main() {
 	RUN_TEST(TestKDASplitAndInit);
 	RUN_TEST(TestKNN);
 	return 0;
-}
+}*/
 
