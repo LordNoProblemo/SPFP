@@ -135,12 +135,16 @@ bool isSizeStr(const char* str)
 }
 int splitWithEq(char* orig, char* pre, char* suf)
 {
-	int len = strlen(orig), i = 0;
+	unsigned int len = strlen(orig), i = 0;
 	for(;orig[i] != '=' && i < len; i++);
 	if(i == len)
 		return -1;
+	char buffer[1025];
+	if(sscanf(&orig[i+1],"%s %s",suf,buffer) == 2)
+		return -2;
 	if(snprintf(pre,i+1,"%s",orig) < 0 || sscanf(&orig[i+1],"%s",suf) == EOF)
 		return -1;
+
 	return i+1;
 }
 SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
@@ -435,9 +439,18 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		int split = splitWithEq(buffer,varName,val);
 		if(split == -1)
 		{
+			fclose(fp);
 			printf(errMes,filename,lines,linErr);
 			spConfigDestroy(config);
 			*msg= SP_CONFIG_INVALID_LINE;
+			return NULL;
+		}
+		if(split == -2)
+		{
+			fclose(fp);
+			printf(errMes,filename,lines,valErr);
+			spConfigDestroy(config);
+			*msg= SP_CONFIG_INVALID_STRING;
 			return NULL;
 		}
 		trim(varName);
