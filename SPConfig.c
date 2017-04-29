@@ -384,7 +384,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 {
 	if(filename == NULL)
 	{
-		printf("Invalid command line : use -c <config_filename>\n");
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		return NULL;
 	}
@@ -392,12 +391,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	if(fp == NULL)
 	{
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
-		if(strcmp(filename,"spcbir.config") != 0)
-		{
-			printf("The configuration file %s couldn't be open\n",filename);
-		}
-		else
-			printf("The default configuration file spcbir.config couldn't be open\n");
 		return NULL;
 	}
 	char buffer[1025];
