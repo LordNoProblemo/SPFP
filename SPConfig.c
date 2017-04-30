@@ -24,12 +24,12 @@
 
 struct sp_config_t
 {
-	char* spImagesDirectory;
-	char* spImagesPrefix;
-	char* spImagesSuffix;
+	char spImagesDirectory[1025];
+	char spImagesPrefix[1025];
+	char spImagesSuffix[1025];
 	int spNumOfImages;
 	int spPCADimension ;
-	char* spPCAFilename ;
+	char spPCAFilename[1025];
 	int spNumOfFeatures ;
 	bool spExtractionMode ;
 	int spNumOfSimilarImages;
@@ -37,7 +37,7 @@ struct sp_config_t
 	int spKNN ;
 	bool spMinimalGUI;
 	int spLoggerLevel;
-	char* spLoggerFilename;
+	char spLoggerFilename[1025];
 	bool extractSet;
 	bool guiSet;
 };
@@ -55,19 +55,30 @@ void SetDefaults(SPConfig conf)
 		conf->spMinimalGUI = false;
 	if(conf->spPCADimension==0)
 		conf->spPCADimension = 20;
-	if(conf->spPCAFilename == NULL)
-		conf->spPCAFilename = "pca.yml";
+	if(conf->spPCAFilename[0] == '\0')
+	{
+		sprintf(conf->spPCAFilename ,"%s", "pca.yml");
+	}
 	if(conf->spNumOfFeatures == 0)
 		conf->spNumOfFeatures = 100;
 	if(conf->spNumOfSimilarImages == 0)
 		conf->spNumOfSimilarImages = 1;
 	if(conf->spLoggerLevel == 0)
 		conf->spLoggerLevel = 3;
-	if(conf->spLoggerFilename == NULL)
-		conf->spLoggerFilename = "stdout";
+	if(conf->spLoggerFilename[0] == '\0')
+	{
+		sprintf(conf->spLoggerFilename,"%s", "stdout");
+	}
 }
 void setZeros(SPConfig con)
 {
+	memset(con->spImagesDirectory,'\0',1025);
+	memset(con->spImagesPrefix,'\0',1025);
+	memset(con->spImagesSuffix,'\0',1025);
+	memset(con->spPCAFilename,'\0',1025);
+	memset(con->spLoggerFilename,'\0',1025);
+	con->extractSet = false;
+	con->guiSet = false;
 	con->spLoggerLevel = 0;
 	con->spKNN = 0;
 	con->spNumOfSimilarImages =0;
@@ -77,7 +88,7 @@ void setZeros(SPConfig con)
 }
 void trim(char* str)
 {
-	unsigned int len =1025;
+	unsigned int len =strlen(str);
 	char ret[1025];
 	unsigned int i = 0;
 	for(;i<1025;i++)
@@ -88,7 +99,7 @@ void trim(char* str)
 	if(i==strlen(str))
 		return;
 	int j = strlen(str);
-	while(str[j-1] == ' ' || str[j-1] =='\n' || str[j-1] =='\0')
+	while((str[j-1] == ' ' || str[j-1] =='\n' || str[j-1] =='\0')&&j>0)
 		j--;
 	int k = i;
 	for(;k<j;k++)
@@ -101,12 +112,14 @@ void trim(char* str)
 
 bool noWhiteSpace(const char* str)
 {
-	int len = strlen(str);
-	if(len == 0)
+	int len = 1025;
+	while((str[len-1]==' '||str[len-1]=='\n' || str[len-1]=='\0') && len>0)
+		len--;
+	if(len == -1)
 		return false;
 	int i = 0;
 	for(;i<len;i++)
-		if(str[i] == ' ' || str[i] == '=')
+		if(str[i] == ' ' || str[i] == '=' || str[i]=='\0')
 			return false;
 	return true;
 }
@@ -122,13 +135,17 @@ bool isSizeStr(const char* str)
 }
 int splitWithEq(char* orig, char* pre, char* suf)
 {
-	int len = strlen(orig), i = 0;
+	unsigned int len = strlen(orig), i = 0;
 	for(;orig[i] != '=' && i < len; i++);
 	if(i == len)
 		return -1;
+	char buffer[1025];
+	if(sscanf(&orig[i+1],"%s %s",suf,buffer) == 2)
+		return -2;
 	if(snprintf(pre,i+1,"%s",orig) < 0 || sscanf(&orig[i+1],"%s",suf) == EOF)
 		return -1;
-	return 0;
+
+	return i+1;
 }
 SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 {
@@ -138,11 +155,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spImagesDirectory != NULL)
+			if(conf->spImagesDirectory[0]!='\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spImagesDirectory = (char*)malloc(1025);
-			if(conf->spImagesDirectory == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spImagesDirectory,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -154,11 +168,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spImagesPrefix != NULL)
+			if(conf->spImagesPrefix[0] != '\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spImagesPrefix = (char*)malloc(1025);
-			if(conf->spImagesPrefix == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spImagesPrefix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -169,11 +180,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spImagesSuffix != NULL)
+			if(conf->spImagesSuffix[0] != '\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spImagesSuffix = (char*)malloc(1025);
-			if(conf->spImagesSuffix == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spImagesSuffix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -184,11 +192,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spImagesSuffix != NULL)
+			if(conf->spImagesSuffix[0] != '\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spImagesSuffix = (char*)malloc(1025);
-			if(conf->spImagesSuffix == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spImagesSuffix,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -229,11 +234,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spPCAFilename != NULL)
+			if(conf->spPCAFilename[0] != '\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spPCAFilename = (char*)malloc(1025);
-			if(conf->spPCAFilename == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spPCAFilename,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -256,7 +258,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 	if(strcmp(varName, "spExtractionMode")==0)
 	{
 		if(!noWhiteSpace(val))
-				return SP_CONFIG_INVALID_STRING;
+				return SP_CONFIG_INVALID_BOOL;
 		if(conf->extractSet)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
 		if(!(strcmp(val,"false")==0||strcmp(val,"true")==0))
@@ -316,7 +318,7 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 	if(strcmp(varName, "spMinimalGUI")==0)
 	{
 		if(!noWhiteSpace(val))
-				return SP_CONFIG_INVALID_STRING;
+				return SP_CONFIG_INVALID_BOOL;
 		if(conf->guiSet)
 			return SP_CONFIG_VARIABLE_ALREADY_SET;
 		if(!(strcmp(val,"false")==0||strcmp(val,"true")==0))
@@ -346,11 +348,8 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 			return SP_CONFIG_INVALID_STRING;
 		else
 		{
-			if(conf->spLoggerFilename != NULL)
+			if(conf->spLoggerFilename[0] != '\0')
 				return SP_CONFIG_VARIABLE_ALREADY_SET;
-			conf->spLoggerFilename = (char*)malloc(1025);
-			if(conf->spLoggerFilename == NULL)
-				return SP_CONFIG_ALLOC_FAIL;
 			sprintf(conf->spLoggerFilename,"%s",val);
 			return SP_CONFIG_SUCCESS;
 		}
@@ -360,21 +359,21 @@ SP_CONFIG_MSG SetVariable(SPConfig conf, char* varName, char* val)
 
 SP_CONFIG_MSG checkConfig(SPConfig conf,int lines,const char* filename)
 {
-	if(conf->spImagesDirectory == NULL)
+	if(conf->spImagesDirectory[0] == '\0')
 	{
 		char format[1025];
 		sprintf(format,parNotSetErr,"spImagesDirectory");
 		printf(errMes,filename,lines,format);
 		return SP_CONFIG_MISSING_DIR;
 	}
-	if(conf->spImagesPrefix == NULL)
+	if(conf->spImagesPrefix[0] == '\0')
 	{
 		char format[1025];
 		sprintf(format,parNotSetErr,"spImagesPrefix");
 		printf(errMes,filename,lines,format);
 		return SP_CONFIG_MISSING_PREFIX;
 	}
-	if(conf->spImagesSuffix == NULL)
+	if(conf->spImagesSuffix[0] == '\0')
 	{
 		char format[1025];
 		sprintf(format,parNotSetErr,"spImagesSuffix");
@@ -395,6 +394,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 {
 	if(filename == NULL)
 	{
+		printf("Invalid command line : use -c <config_filename>\n");
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		return NULL;
 	}
@@ -402,29 +402,17 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	if(fp == NULL)
 	{
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
+		if(strcmp(filename,"spcbir.config") != 0)
+		{
+			printf("The configuration file %s couldn't be open\n",filename);
+		}
+		else
+			printf("The default configuration file spcbir.config couldn't be open\n");
 		return NULL;
 	}
-	char* buffer = (char*)malloc(1025);
-	if(buffer == NULL)
-	{
-		*msg = SP_CONFIG_ALLOC_FAIL;
-		return NULL;
-	}
-	char* varName=(char*)malloc(1025);
-	if(varName == NULL)
-	{
-		free(buffer);
-		*msg = SP_CONFIG_ALLOC_FAIL;
-		return NULL;
-	}
-	char* val=(char*)malloc(1025);
-	if(val == NULL)
-	{
-		free(buffer);
-		free(varName);
-		*msg = SP_CONFIG_ALLOC_FAIL;
-		return NULL;
-	}
+	char buffer[1025];
+	char varName[1025];
+	char val[1025];
 	int lines = 0;
 	SPConfig config = (SPConfig)malloc(sizeof(struct sp_config_t));
 	if(config == NULL)
@@ -437,61 +425,71 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	config->extractSet = false;
 	config->guiSet=false;
 	SP_CONFIG_MSG tempMsg;
-	int i = 0;
 	while(fgets(buffer,1025,fp)!=NULL)
 	{
 		lines++;
 		trim(buffer);
-		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#')
+		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#' || strlen(buffer) == 0)
 		{
-			i=0;
-			for(;i<1025;i++)
-			{
-				buffer[i] = '\0';
-				varName[i] = '\0';
-				val[i] = '\0';
-			}
+			memset(buffer,'\0',1025);
+			memset(varName,'\0',1025);
+			memset(val,'\0',1025);
 			continue;
 		}
-		else if(splitWithEq(buffer,varName,val) == -1)
+		int split = splitWithEq(buffer,varName,val);
+		if(split == -1)
 		{
+			fclose(fp);
 			printf(errMes,filename,lines,linErr);
 			spConfigDestroy(config);
 			*msg= SP_CONFIG_INVALID_LINE;
 			return NULL;
 		}
+		if(split == -2)
+		{
+			fclose(fp);
+			printf(errMes,filename,lines,valErr);
+			spConfigDestroy(config);
+			*msg= SP_CONFIG_INVALID_STRING;
+			return NULL;
+		}
 		trim(varName);
 		trim(val);
-		 tempMsg = SetVariable(config,varName,val);
+		tempMsg = SetVariable(config,varName,val);
 		if(tempMsg != SP_CONFIG_SUCCESS)
 		{
 			spConfigDestroy(config);
 			*msg = tempMsg;
+			fclose(fp);
 			if(tempMsg != SP_CONFIG_NO_SUCH_VAR && tempMsg != SP_CONFIG_VARIABLE_ALREADY_SET)
 				printf(errMes,filename,lines,valErr);
+			if(tempMsg == SP_CONFIG_INVALID_INTEGER)
+				*msg = SP_CONFIG_INVALID_INTEGER;
+			else if(tempMsg == SP_CONFIG_INVALID_STRING)
+				*msg =  SP_CONFIG_INVALID_STRING;
+			else if(tempMsg == SP_CONFIG_INVALID_BOOL)
+				*msg =  SP_CONFIG_INVALID_BOOL;
+			else if(tempMsg == SP_CONFIG_NO_SUCH_VAR)
+				*msg =  SP_CONFIG_NO_SUCH_VAR;
+			else
+				*msg = SP_CONFIG_VARIABLE_ALREADY_SET;
 			return NULL;
 		}
-		i=0;
-		for(;i<1025;i++)
-		{
-			buffer[i] = '\0';
-			varName[i] = '\0';
-			val[i] = '\0';
-		}
+		memset(buffer,'\0',1025);
+		memset(varName,'\0',1025);
+		memset(val,'\0',1025);
 	}
 
 	SetDefaults(config);
-	tempMsg = checkConfig(config,lines, filename);
-	if(tempMsg != SP_CONFIG_SUCCESS)
+	*msg = checkConfig(config,lines, filename);
+	if(*msg != SP_CONFIG_SUCCESS)
 	{
 		spConfigDestroy(config);
-		*msg = tempMsg;
+		fclose(fp);
 		return NULL;
 	}
 	*msg = SP_CONFIG_SUCCESS;
 	fclose(fp);
-	free(buffer);
-	free(varName);
 	return config;
 }
 
@@ -573,16 +571,6 @@ void spConfigDestroy(SPConfig config)
 {
 	if(config == NULL)
 		return;
-	if(config->spImagesDirectory!=NULL)
-		free(config->spImagesDirectory);
-	if(config->spImagesPrefix!=NULL)
-		free(config->spImagesPrefix);
-	if(config->spImagesSuffix!=NULL)
-		free(config->spImagesSuffix);
-	if(config->spLoggerFilename!=NULL)
-		free(config->spLoggerFilename);
-	if(config->spPCAFilename!=NULL)
-		free(config->spPCAFilename);
 	free(config);
 }
 int spConfigGetNumOfSimImages(const SPConfig config, SP_CONFIG_MSG* msg)
