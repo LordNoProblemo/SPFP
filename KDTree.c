@@ -313,8 +313,8 @@ SPBPQueue* KNN(SPPoint** points,SPPoint* pnt, int k, SPLIT_METHOD method, int si
 	SPBPQueue* ret = spBPQueueCreate(k);
 	if(ret == NULL)
 	{
-	spLoggerPrintError("Error while trying to allocating data for Queue!",__FILE__,__func__,__LINE__);
-	spLoggerPrintInfo("Returning NULL!");
+		spLoggerPrintError("Error while trying to allocating data for Queue!",__FILE__,__func__,__LINE__);
+		spLoggerPrintInfo("Returning NULL!");
 	}
 	KDNode* KDTree = buildFromPoints(points, method,size);
 	if(KDTree == NULL)

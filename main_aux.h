@@ -8,6 +8,7 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 #include "SPImageProc.h"
+#include "KDTree.h"
 extern "C"{
 #include "SPConfig.h"
 }

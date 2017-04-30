@@ -1,11 +1,6 @@
-#include <cstring>
-#include <cstdio>
-#include "SPImageProc.h"
 #include "main_aux.h"
-extern "C"
-{
-#include "SPConfig.h"
-}
+#include <cstring>
+
 
 int main(int argc, char** argv)
 {
@@ -28,16 +23,15 @@ int main(int argc, char** argv)
 	}
 	char logger_path[1025];
 	msg = spConfigGetLoggerPath(logger_path, config);
-	SP_LOGGER_MSG lmsg = spLoggerCreate(logger_path,
-			(SP_LOGGER_LEVEL) spConfigGetLoggerLevel(config, &msg));
+	SP_LOGGER_LEVEL lvl = (SP_LOGGER_LEVEL) spConfigGetLoggerLevel(config, &msg);
+	SP_LOGGER_MSG lmsg = spLoggerCreate(logger_path,lvl);
 	if (lmsg != SP_LOGGER_SUCCESS)
 	{
 		printf("Logger init failed!");
 		spConfigDestroy(config);
 		exit(1);
 	}
-	lmsg = spLoggerPrintDebug("Logger initialized", __FILE__, __func__,
-	__LINE__);
+	lmsg = spLoggerPrintDebug("Logger initialized", __FILE__, __func__,__LINE__);
 	sp::ImageProc* imageProc = new sp::ImageProc(config);
 	SPPoint*** features;
 	int* nFeatures;

@@ -25,7 +25,7 @@ SP_LOGGER_MSG spLoggerCreate(const char* filename, SP_LOGGER_LEVEL level) {
 		return SP_LOGGER_OUT_OF_MEMORY;
 	}
 	logger->level = level; //Set the level of the logger
-	if (filename == NULL) { //In case the filename is not set use stdout
+	if (filename == NULL || strcmp("stdout", filename)==0) { //In case the filename is not set use stdout
 		logger->outputChannel = stdout;
 		logger->isStdOut = true;
 	} else { //Otherwise open the file in write mode
@@ -70,19 +70,15 @@ SP_LOGGER_MSG spLoggerPrint(const char* msg, const char* file,
 
 SP_LOGGER_MSG spLoggerPrintMsg(const char * msg)
 {
-	char * whole_msg = (char*)malloc(strlen(msg)+1);
-	if(whole_msg == NULL)
-		return SP_LOGGER_OUT_OF_MEMORY;
-	strcpy(whole_msg, msg);
-	strcat(whole_msg, "\n");
+
 	if(logger == NULL)
 		return SP_LOGGER_UNDIFINED;
-	unsigned int out_size = fwrite(whole_msg, 1,strlen(whole_msg), logger->outputChannel);
-	free(whole_msg);
-	if(out_size < strlen(whole_msg))
+	unsigned int out_size = fwrite(msg, 1,strlen(msg), logger->outputChannel);
+	if(out_size < strlen(msg))
 		return SP_LOGGER_WRITE_FAIL;
 	out_size = fwrite("\n", 1, 1, logger->outputChannel);
-
+	if(out_size < 1)
+			return SP_LOGGER_WRITE_FAIL;
 	return SP_LOGGER_SUCCESS;
 }
 
@@ -125,6 +121,8 @@ SP_LOGGER_MSG spLoggerPrintInfo(const char* msg)
 {
 	if(logger == NULL)
 		return SP_LOGGER_UNDIFINED;
+	if(logger->level <2)
+		return SP_LOGGER_SUCCESS;
 	char * whole_msg= (char*) malloc(strlen(msg)+100); //allocate enough for output
 	if (whole_msg==NULL)
 		return SP_LOGGER_OUT_OF_MEMORY;
