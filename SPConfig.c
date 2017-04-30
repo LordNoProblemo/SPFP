@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 #define errMes "File: %s \nLine: %d \nMessage: %s\n"
 #define linErr "Invalid configuration line"
 #define valErr "Invalid value - constraint not met"
@@ -429,7 +429,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	{
 		lines++;
 		trim(buffer);
-		if(buffer[0] ==' ' || buffer[0] == '\n' || buffer[0] == '\0'|| buffer[0] == '#' || strlen(buffer) == 0)
+		if(isspace(buffer[0])!=0|| buffer[0] == '#' || strlen(buffer) == 0)
 		{
 			memset(buffer,'\0',1025);
 			memset(varName,'\0',1025);
