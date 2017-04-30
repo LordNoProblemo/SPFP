@@ -226,4 +226,9 @@ int spConfigGetLoggerLevel(const SPConfig config, SP_CONFIG_MSG* msg);
  *  - SP_CONFIG_SUCCESS - in case of success
  */
 SP_CONFIG_MSG spConfigGetLoggerPath(char* loggerPath, const SPConfig config);
+
+/**
+ * Returns the type of split method given by Config
+ */
+SPLIT_METHOD spConfigGetMethod(const SPConfig config);
 #endif /* SPCONFIG_H_ */

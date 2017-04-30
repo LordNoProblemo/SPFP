@@ -619,3 +619,7 @@ SP_CONFIG_MSG spConfigGetLoggerPath(char* loggerPath, const SPConfig config)
 		sprintf(loggerPath,"%s/%s",config->spImagesDirectory,config->spLoggerFilename);
 	return SP_CONFIG_SUCCESS;
 }
+SPLIT_METHOD spConfigGetMethod(const SPConfig config)
+{
+	return config->spKDTreeSplitMethod;
+}
