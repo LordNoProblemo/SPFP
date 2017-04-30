@@ -8,14 +8,15 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 #include "SPImageProc.h"
-extern "C"
-{
+extern "C"{
 #include "SPConfig.h"
 }
 
-bool extractFeatures(SPConfig config, sp::ImageProc* imageProc);
+void freeFreatures(SPConfig config, SPPoint*** features, int* nFeatures);
+
+bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures);
 
 
-bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint*** features);
+bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures);
 
 #endif /* MAIN_AUX_H_ */

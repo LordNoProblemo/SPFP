@@ -101,7 +101,7 @@ bool extractFeatures(SPConfig config, sp::ImageProc* imageProc)
 	return true;
 }
 
-int readFeatures(char* imageName, SPPoint*** features)
+int readFeatures(char* imageName, SPPoint**** features)
 {
 	char extension[] = "feats";
 	strcpy(imageName + strlen(imageName) - 3, extension);
@@ -151,7 +151,7 @@ int readFeatures(char* imageName, SPPoint*** features)
 	return numOfFeatures;
 }
 
-bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint*** features)
+bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features)
 {
 	if (config == NULL)
 	{
