@@ -556,7 +556,10 @@ SP_CONFIG_MSG spConfigGetImagePath(char* imagePath, const SPConfig config, int i
 		return SP_CONFIG_INVALID_ARGUMENT;
 	if(index >= config->spNumOfImages)
 		return SP_CONFIG_INDEX_OUT_OF_RANGE;
-	sprintf(imagePath,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,config->spImagesSuffix);
+	if(config->spImagesDirectory[strlen(config->spImagesDirectory)-1]=='/')
+		sprintf(imagePath,"%s%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,config->spImagesSuffix);
+	else
+		sprintf(imagePath,"%s/%s%d%s",config->spImagesDirectory,config->spImagesPrefix,index,config->spImagesSuffix);
 	return SP_CONFIG_SUCCESS;
 
 }
@@ -564,7 +567,10 @@ SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config)
 {
 	if(pcaPath == NULL || config == NULL)
 		return SP_CONFIG_INVALID_ARGUMENT;
-	sprintf(pcaPath,"%s%s",config->spImagesDirectory,config->spPCAFilename);
+	if(config->spImagesDirectory[strlen(config->spImagesDirectory)-1]=='/')
+		sprintf(pcaPath,"%s%s",config->spImagesDirectory,config->spPCAFilename);
+	else
+		sprintf(pcaPath,"%s/%s",config->spImagesDirectory,config->spPCAFilename);
 	return SP_CONFIG_SUCCESS;
 }
 void spConfigDestroy(SPConfig config)
@@ -616,7 +622,7 @@ SP_CONFIG_MSG spConfigGetLoggerPath(char* loggerPath, const SPConfig config)
 	if(strcmp(config->spLoggerFilename,  "stdout")==0)
 		sprintf(loggerPath,"%s","stdout");
 	else
-		sprintf(loggerPath,"%s/%s",config->spImagesDirectory,config->spLoggerFilename);
+		sprintf(loggerPath,"%s",config->spLoggerFilename);
 	return SP_CONFIG_SUCCESS;
 }
 SPLIT_METHOD spConfigGetMethod(const SPConfig config)

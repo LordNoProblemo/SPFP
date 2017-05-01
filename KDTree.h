@@ -18,7 +18,7 @@ typedef struct _kdArray
 	int** indexOrdPerDim;
 	int n,d, numofPoints;
 
-}KDArray;
+} KDArray;
 struct kdn
 {
 	int Dim;

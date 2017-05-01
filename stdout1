@@ -1,0 +1,510 @@
+---DEBUG---
+- file: main.cpp
+- function: main
+- line: 36
+- message: Logger initialized
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag0.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag1.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag2.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag3.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag4.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag5.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag6.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag7.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag8.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag9.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag10.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag11.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag12.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag13.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag14.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag15.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag16.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag17.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag18.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag19.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag20.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag21.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag22.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag23.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag24.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag25.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag26.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag27.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag28.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag29.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag30.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag31.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag32.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag33.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag34.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag35.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag36.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag37.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag38.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag39.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag40.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag41.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag42.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag43.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag44.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag45.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag46.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag47.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag48.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag49.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag50.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag51.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag52.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag53.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag54.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag55.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag56.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag57.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag58.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag59.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag60.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag61.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag62.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag63.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag64.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag65.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag66.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag67.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag68.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag69.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag70.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag71.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag72.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag73.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag74.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag75.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag76.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag77.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag78.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag79.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag80.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag81.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag82.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag83.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag84.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag85.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag86.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag87.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag88.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag89.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag90.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag91.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag92.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag93.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag94.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag95.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag96.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag97.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag98.feats
+---DEBUG---
+- file: main_aux.cpp
+- function: readFeatures
+- line: 153
+- message: ./images/imag99.feats
+---DEBUG---
+- file: main.cpp
+- function: main
+- line: 62
+- message: preprocess finished
