@@ -8,8 +8,9 @@
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
 #include "SPImageProc.h"
-#include "KDTree.h"
+
 extern "C"{
+#include "KDTree.h"
 #include "SPConfig.h"
 }
 
@@ -19,5 +20,9 @@ bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** feat
 
 
 bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures);
+
+KDNode* TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures);
+
+void closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree, char* queryImage);
 
 #endif /* MAIN_AUX_H_ */

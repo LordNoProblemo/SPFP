@@ -1,3 +1,4 @@
+#include "main_aux.h"
 #include "SPImageProc.h"
 #include <string.h>
 
@@ -266,8 +267,7 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc,
 	return true;
 }
 
-KDNode*
-TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures)
+KDNode* TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures)
 {
 	SP_CONFIG_MSG msg;
 	int numOfImages = spConfigGetNumOfImages(config, &msg);
@@ -288,19 +288,18 @@ TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures)
 	return tree;
 }
 
-SPBPQueue*
-closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
-		char* qureyImage)
+void closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
+		char* queryImage)
 {
 	SP_CONFIG_MSG msg;
 	int cfeats = spConfigGetNumOfFeatures(config, &msg);
-	SPPoint** cfeatures = imageProc->getImageFeatures(qureyImage, 3316,
+	SPPoint** cfeatures = imageProc->getImageFeatures(queryImage, 3316,
 			&cfeats);
 	if (cfeatures == NULL)
 	{
 		spLoggerPrintError("Error in image features", __FILE__, __FUNCTION__,
 		__LINE__);
-		return false;
+		return;
 	}
 	int numOfImages = spConfigGetNumOfImages(config, &msg);
 	int k = spConfigGetKNN(config, &msg);
@@ -319,7 +318,7 @@ closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
 			__LINE__);
 			free(countPerIndex);
 			DestroySPP2Pointers(cfeatures, cfeats);
-			return NULL;
+			return;
 		}
 		KNNFromTree(tree, cfeatures[i], queue);
 		for (int j = 0; j < k; j++)
@@ -332,7 +331,7 @@ closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
 				DestroySPP2Pointers(cfeatures, cfeats);
 				free(countPerIndex);
 				spBPQueueDequeue(queue);
-				return NULL;
+				return;
 			}
 			countPerIndex[element.index] += 1;
 		}
@@ -344,11 +343,21 @@ closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
 		spBPQueueEnqueue(majorityIndexes, i, -countPerIndex[i]);
 	free(countPerIndex);
 	BPQueueElement peek;
-	for (int i = 1; i < sim; i++)
+	bool gui = spConfigMinimalGui(config, &msg);
+	char image[1025];
+	if (!gui)
+		printf("Best candidates for - %s - are:\n", queryImage);
+	for (int i = 0; i < sim; i++)
 	{
 		spBPQueuePeek(majorityIndexes, &peek);
-		printf(", %d", peek.index);
+		spConfigGetImagePath(image, config, peek.index);
 		spBPQueueDequeue(majorityIndexes);
+		if (gui)
+			imageProc->showImage(image);
+		else
+			printf("%s\n", image);
+
 	}
+	spBPQueueDestroy(majorityIndexes);
 	DestroySPP2Pointers(cfeatures, cfeats);
 }

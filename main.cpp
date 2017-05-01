@@ -1,6 +1,6 @@
 #include "main_aux.h"
 #include <cstring>
-
+#include "KDTree.h"
 
 int main(int argc, char** argv)
 {
@@ -23,15 +23,17 @@ int main(int argc, char** argv)
 	}
 	char logger_path[1025];
 	msg = spConfigGetLoggerPath(logger_path, config);
-	SP_LOGGER_LEVEL lvl = (SP_LOGGER_LEVEL) spConfigGetLoggerLevel(config, &msg);
-	SP_LOGGER_MSG lmsg = spLoggerCreate(logger_path,lvl);
+	SP_LOGGER_LEVEL lvl = (SP_LOGGER_LEVEL) spConfigGetLoggerLevel(config,
+			&msg);
+	SP_LOGGER_MSG lmsg = spLoggerCreate(logger_path, lvl);
 	if (lmsg != SP_LOGGER_SUCCESS)
 	{
 		printf("Logger init failed!");
 		spConfigDestroy(config);
 		exit(1);
 	}
-	lmsg = spLoggerPrintDebug("Logger initialized", __FILE__, __func__,__LINE__);
+	lmsg = spLoggerPrintDebug("Logger initialized", __FILE__, __func__,
+			__LINE__);
 	sp::ImageProc* imageProc = new sp::ImageProc(config);
 	SPPoint*** features;
 	int* nFeatures;
@@ -45,9 +47,23 @@ int main(int argc, char** argv)
 	{
 		fetch = fetchFeatures(config, imageProc, &features, &nFeatures);
 	}
+
 	if (!fetch)
 	{
 		spLoggerPrintError("Extraction Failed!", __FILE__, __func__, __LINE__);
+		freeFreatures(config, features, nFeatures);
+		spLoggerDestroy();
+		spConfigDestroy(config);
+		delete imageProc;
+		exit(1);
+	}
+
+	KDNode* tree = TreeFromData(config, features, nFeatures);
+	spLoggerPrintDebug("preprocess finished", __FILE__, __func__, __LINE__);
+	if (tree == NULL)
+	{
+		spLoggerPrintError("Tree creation Failed!", __FILE__, __func__,
+				__LINE__);
 		freeFreatures(config, features, nFeatures);
 		spLoggerDestroy();
 		spConfigDestroy(config);
@@ -61,9 +77,10 @@ int main(int argc, char** argv)
 		scanf("%s", query_image);
 		if (strcmp("<>", query_image) == 0)
 			break;
-
+		closestImages(config, imageProc, tree, query_image);
 	}
 	printf("Exiting...\n");
+	destroyKDN(tree);
 	freeFreatures(config, features, nFeatures);
 	spConfigDestroy(config);
 	spLoggerDestroy();

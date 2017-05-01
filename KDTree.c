@@ -150,8 +150,8 @@ KDArray** split(KDArray* KDA, int coor)
 	double leftBound = spPointGetAxisCoor(points[indexOrd[coor][size1-1]],coor);
 	for(i=0;i<d;i++)
 	{
-		ret[0]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size1);
-		ret[1]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size2);
+		ret[0]->indexOrdPerDim[i] = (int*)calloc(size1, sizeof(int));
+		ret[1]->indexOrdPerDim[i] = (int*)calloc(size2, sizeof(int));
 		if(ret[0]->indexOrdPerDim[i]==NULL || ret[1]->indexOrdPerDim[i] == NULL)
 		{
 			spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
@@ -313,8 +313,8 @@ SPBPQueue* KNN(SPPoint** points,SPPoint* pnt, int k, SPLIT_METHOD method, int si
 	SPBPQueue* ret = spBPQueueCreate(k);
 	if(ret == NULL)
 	{
-		spLoggerPrintError("Error while trying to allocating data for Queue!",__FILE__,__func__,__LINE__);
-		spLoggerPrintInfo("Returning NULL!");
+	spLoggerPrintError("Error while trying to allocating data for Queue!",__FILE__,__func__,__LINE__);
+	spLoggerPrintInfo("Returning NULL!");
 	}
 	KDNode* KDTree = buildFromPoints(points, method,size);
 	if(KDTree == NULL)
@@ -323,5 +323,6 @@ SPBPQueue* KNN(SPPoint** points,SPPoint* pnt, int k, SPLIT_METHOD method, int si
 		return NULL;
 	}
 	KNNFromTree(KDTree, pnt, ret);
+	destroyKDN(KDTree);
 	return ret;
 }

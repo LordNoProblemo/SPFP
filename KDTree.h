@@ -27,6 +27,8 @@ struct kdn
 	SPPoint* Data;
 };
 
+
+
 /**
  * Destroys a pointer of KDArray
  */
