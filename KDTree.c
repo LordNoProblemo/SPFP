@@ -36,7 +36,7 @@ void destroyArray(KDArray* ar)
 	int i = 0;
 	for(;i<ar->d;i++)
 		if(ar->indexOrdPerDim[i]!=NULL)
-			free(ar->pointsArray[i]);
+			free(ar->indexOrdPerDim[i]);
 	free(ar);
 	return;
 }
@@ -147,11 +147,11 @@ KDArray** split(KDArray* KDA, int coor)
 		else
 			leftIndexes[indexOrd[coor][i]] = 0;
 	}
-	double leftBound = spPointGetAxisCoor(points[indexOrd[coor][size1-1]],coor);
+	//double leftBound = spPointGetAxisCoor(points[indexOrd[coor][size1-1]],coor);
 	for(i=0;i<d;i++)
 	{
-		ret[0]->indexOrdPerDim[i] = (int*)calloc(size1, sizeof(int));
-		ret[1]->indexOrdPerDim[i] = (int*)calloc(size2, sizeof(int));
+		ret[0]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size1);
+		ret[1]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size2);
 		if(ret[0]->indexOrdPerDim[i]==NULL || ret[1]->indexOrdPerDim[i] == NULL)
 		{
 			spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);
@@ -164,12 +164,7 @@ KDArray** split(KDArray* KDA, int coor)
 		int k1 = 0,k2 = 0,j = 0;
 		for(;j<n;j++)
 		{
-			if(spPointGetAxisCoor(points[indexOrd[i][j]],coor)<leftBound)
-			{
-				ret[0]->indexOrdPerDim[i][k1] = indexOrd[i][j];
-				k1++;
-			}
-			else if(spPointGetAxisCoor(points[indexOrd[i][j]],coor) == leftBound && leftIndexes[indexOrd[i][j]] == 1)
+			if(leftIndexes[indexOrd[i][j]] == 1)
 			{
 				ret[0]->indexOrdPerDim[i][k1] = indexOrd[i][j];
 				k1++;
@@ -248,7 +243,9 @@ KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor)
 		ret->Dim = (lastCoor+1)%d;
 	else
 		ret->Dim = rand()%d;
+
 	KDArray** splitArray = split(KDA,ret->Dim);
+
 	if(splitArray == NULL)
 	{
 		destroyKDN(ret);
@@ -260,11 +257,13 @@ KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor)
 	destroyArray(splitArray[0]);
 	destroyArray(splitArray[1]);
 	free(splitArray);
+
 	if(ret->Left == NULL || ret->Right == NULL)
 	{
 		destroyKDN(ret);
 		return NULL;
 	}
+
 	return ret;
 }
 
