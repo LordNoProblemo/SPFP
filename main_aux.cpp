@@ -1,12 +1,22 @@
 #include "SPImageProc.h"
 #include <string.h>
 
+void DestroySPP2Pointers(SPPoint** points, int size)
+{
+	for (int i = 0; i < size; i++)
+		spPointDestroy(points[i]);
+	free(points);
+}
+
 void freeFreatures(SPConfig config, SPPoint*** features, int* nFeatures)
 {
 	SP_CONFIG_MSG msg;
 	int numOfImages = spConfigGetNumOfImages(config, &msg);
-	for(int i =0; i < numOfImages; i++){
-		for(int j = 0; j < nFeatures[i]; j++)
+	for (int i = 0; i < numOfImages; i++)
+	{
+		if (features[i] == NULL)
+			continue;
+		for (int j = 0; j < nFeatures[i]; j++)
 			spPointDestroy(features[i][j]);
 		free(features[i]);
 	}
@@ -20,7 +30,7 @@ bool writeFeatures(char* imageName, SPPoint** features, int numOfFeatures)
 	strcpy(imageName + strlen(imageName) - 3, extension);
 	spLoggerPrintDebug(imageName, __FILE__, __FUNCTION__, __LINE__);
 	FILE* f = fopen(imageName, "wb");
-	if(f == NULL)
+	if (f == NULL)
 		return false;
 	int outnum = fwrite(&numOfFeatures, sizeof(int), 1, f);
 	if (outnum < 1)
@@ -60,7 +70,8 @@ bool writeFeatures(char* imageName, SPPoint** features, int numOfFeatures)
 	return true;
 }
 
-bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures)
+bool extractFeatures(SPConfig config, sp::ImageProc* imageProc,
+		SPPoint**** features, int** nFeatures)
 {
 	if (config == NULL)
 	{
@@ -69,7 +80,8 @@ bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** feat
 	}
 	if (imageProc == NULL)
 	{
-		spLoggerPrintError("imageProc is null!", __FILE__, __FUNCTION__, __LINE__);
+		spLoggerPrintError("imageProc is null!", __FILE__, __FUNCTION__,
+		__LINE__);
 		return false;
 	}
 	SP_CONFIG_MSG cmsg;
@@ -87,18 +99,18 @@ bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** feat
 				__FUNCTION__, __LINE__);
 		return false;
 	}
-	*features = (SPPoint***)malloc(sizeof(SPPoint**)*numOfImages);
-	if(*features == NULL)
+	*features = (SPPoint***) malloc(sizeof(SPPoint**) * numOfImages);
+	if (*features == NULL)
 	{
-		spLoggerPrintError("Allocation failed!", __FILE__,
-						__FUNCTION__, __LINE__);
+		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
+		__LINE__);
 		return false;
 	}
-	*nFeatures = (int*)malloc(sizeof(int)*numOfImages);
-	if(*nFeatures == NULL)
+	*nFeatures = (int*) malloc(sizeof(int) * numOfImages);
+	if (*nFeatures == NULL)
 	{
-		spLoggerPrintError("Allocation failed!", __FILE__,
-						__FUNCTION__, __LINE__);
+		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
+		__LINE__);
 		free(*features);
 		return false;
 	}
@@ -113,13 +125,21 @@ bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** feat
 			return false;
 		}
 		int cfeats = numOfFeatrues;
-		SPPoint** cfeatures = imageProc->getImageFeatures(imagePath, i, &cfeats);
+		SPPoint** cfeatures = imageProc->getImageFeatures(imagePath, i,
+				&cfeats);
+		if (cfeatures == NULL)
+		{
+			spLoggerPrintError("Error in writing features", __FILE__,
+					__FUNCTION__, __LINE__);
+			return false;
+		}
 		(*features)[i] = cfeatures;
 		(*nFeatures)[i] = cfeats;
 		bool wrote = writeFeatures(imagePath, cfeatures, cfeats);
-		if(!wrote)
+		if (!wrote)
 		{
-			spLoggerPrintError("Error in writing features", __FILE__,__FUNCTION__, __LINE__);
+			spLoggerPrintError("Error in writing features", __FILE__,
+					__FUNCTION__, __LINE__);
 			return false;
 		}
 	}
@@ -133,17 +153,17 @@ int readFeatures(char* imageName, SPPoint*** features)
 	strcpy(imageName + strlen(imageName) - 3, extension);
 	spLoggerPrintDebug(imageName, __FILE__, __FUNCTION__, __LINE__);
 	FILE* f = fopen(imageName, "rb");
-	if(f==NULL)
+	if (f == NULL)
 		return -1;
 	int numOfFeatures = 0;
 	int innum = fread(&numOfFeatures, sizeof(int), 1, f);
-	if (innum < 1|| numOfFeatures==0)
+	if (innum < 1 || numOfFeatures == 0)
 	{
 		fclose(f);
 		return -1;
 	}
-	*features = (SPPoint**)malloc(sizeof(SPPoint*) * numOfFeatures);
-	if(*features == NULL)
+	*features = (SPPoint**) malloc(sizeof(SPPoint*) * numOfFeatures);
+	if (*features == NULL)
 	{
 		fclose(f);
 		return -1;
@@ -178,7 +198,8 @@ int readFeatures(char* imageName, SPPoint*** features)
 	return numOfFeatures;
 }
 
-bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures)
+bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc,
+		SPPoint**** features, int** nFeatures)
 {
 	if (config == NULL)
 	{
@@ -187,12 +208,14 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** featur
 	}
 	if (imageProc == NULL)
 	{
-		spLoggerPrintError("imageProc is null!", __FILE__, __FUNCTION__, __LINE__);
+		spLoggerPrintError("imageProc is null!", __FILE__, __FUNCTION__,
+		__LINE__);
 		return false;
 	}
 	if (features == NULL)
 	{
-		spLoggerPrintError("features is null!", __FILE__, __FUNCTION__, __LINE__);
+		spLoggerPrintError("features is null!", __FILE__, __FUNCTION__,
+		__LINE__);
 		return false;
 	}
 	SP_CONFIG_MSG cmsg;
@@ -203,18 +226,18 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** featur
 				__FUNCTION__, __LINE__);
 		return false;
 	}
-	*features = (SPPoint***)malloc(sizeof(SPPoint**)*numOfImages);
-	if(*features == NULL)
+	*features = (SPPoint***) malloc(sizeof(SPPoint**) * numOfImages);
+	if (*features == NULL)
 	{
-		spLoggerPrintError("Allocation failed!", __FILE__,
-						__FUNCTION__, __LINE__);
+		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
+		__LINE__);
 		return false;
 	}
-	*nFeatures = (int*)malloc(sizeof(int)*numOfImages);
-	if(*nFeatures == NULL)
+	*nFeatures = (int*) malloc(sizeof(int) * numOfImages);
+	if (*nFeatures == NULL)
 	{
-		spLoggerPrintError("Allocation failed!", __FILE__,
-						__FUNCTION__, __LINE__);
+		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
+		__LINE__);
 		free(*features);
 		return false;
 	}
@@ -232,9 +255,10 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** featur
 		int numOfFeaures = readFeatures(imagePath, &cfeatures);
 		(*features)[i] = cfeatures;
 		(*nFeatures)[i] = numOfFeaures;
-		if(numOfFeaures == -1)
+		if (numOfFeaures == -1)
 		{
-			spLoggerPrintError("Error in reading features", __FILE__,__FUNCTION__, __LINE__);
+			spLoggerPrintError("Error in reading features", __FILE__,
+					__FUNCTION__, __LINE__);
 			return false;
 		}
 	}
@@ -242,21 +266,89 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** featur
 	return true;
 }
 
-
-KDNode* TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures)
+KDNode*
+TreeFromData(SPConfig config, SPPoint*** features, int* nFeatures)
 {
 	SP_CONFIG_MSG msg;
 	int numOfImages = spConfigGetNumOfImages(config, &msg);
 	int numOfFeatures = 0;
 	int cur = 0;
-	for(int i = 0; i < numOfImages; i++)
+	for (int i = 0; i < numOfImages; i++)
 		numOfFeatures += nFeatures[i];
-	SPPoint** flatFeatures = (SPPoint**)malloc(numOfFeatures*sizeof(SPPoint*));
-	for(int i = 0; i < numOfImages; i++)
+	SPPoint** flatFeatures = (SPPoint**) malloc(
+			numOfFeatures * sizeof(SPPoint*));
+	for (int i = 0; i < numOfImages; i++)
 	{
-		memcpy(flatFeatures+cur, features[i], nFeatures[i]*sizeof(SPPoint*));
-		cur+=nFeatures[i];
+		memcpy(flatFeatures + cur, features[i],
+				nFeatures[i] * sizeof(SPPoint*));
+		cur += nFeatures[i];
 	}
-	//SPLIT_METHOD method =
-	//KDNode* Tree = buildFromPoints(flatFeatures, )
+	SPLIT_METHOD method = spConfigGetMethod(config);
+	KDNode* tree = buildFromPoints(flatFeatures, method, numOfFeatures);
+	return tree;
+}
+
+SPBPQueue*
+closestImages(SPConfig config, sp::ImageProc* imageProc, KDNode* tree,
+		char* qureyImage)
+{
+	SP_CONFIG_MSG msg;
+	int cfeats = spConfigGetNumOfFeatures(config, &msg);
+	SPPoint** cfeatures = imageProc->getImageFeatures(qureyImage, 3316,
+			&cfeats);
+	if (cfeatures == NULL)
+	{
+		spLoggerPrintError("Error in image features", __FILE__, __FUNCTION__,
+		__LINE__);
+		return false;
+	}
+	int numOfImages = spConfigGetNumOfImages(config, &msg);
+	int k = spConfigGetKNN(config, &msg);
+	int *countPerIndex = (int*) calloc(numOfImages, sizeof(int));
+	if (countPerIndex == NULL)
+	{
+		spLoggerPrintError("Allocation failed", __FILE__, __func__, __LINE__);
+		free(cfeatures);
+	}
+	for (int i = 0; i < cfeats; i++)
+	{
+		SPBPQueue* queue = spBPQueueCreate(k);
+		if (queue == NULL)
+		{
+			spLoggerPrintError("Allocation failed", __FILE__, __func__,
+			__LINE__);
+			free(countPerIndex);
+			DestroySPP2Pointers(cfeatures, cfeats);
+			return NULL;
+		}
+		KNNFromTree(tree, cfeatures[i], queue);
+		for (int j = 0; j < k; j++)
+		{
+			sp_bpq_element_t element;
+			if (spBPQueuePeek(queue, &element) != SP_BPQUEUE_SUCCESS)
+			{
+				spLoggerPrintError("Allocation failed", __FILE__, __func__,
+				__LINE__);
+				DestroySPP2Pointers(cfeatures, cfeats);
+				free(countPerIndex);
+				spBPQueueDequeue(queue);
+				return NULL;
+			}
+			countPerIndex[element.index] += 1;
+		}
+
+	}
+	int sim = spConfigGetNumOfSimImages(config, &msg);
+	SPBPQueue* majorityIndexes = spBPQueueCreate(sim);
+	for (int i = 0; i < numOfImages; i++)
+		spBPQueueEnqueue(majorityIndexes, i, -countPerIndex[i]);
+	free(countPerIndex);
+	BPQueueElement peek;
+	for (int i = 1; i < sim; i++)
+	{
+		spBPQueuePeek(majorityIndexes, &peek);
+		printf(", %d", peek.index);
+		spBPQueueDequeue(majorityIndexes);
+	}
+	DestroySPP2Pointers(cfeatures, cfeats);
 }

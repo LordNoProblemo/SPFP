@@ -53,5 +53,7 @@ KDNode* buildFromKDArray(KDArray* KDA,SPLIT_METHOD method, int lastCoor);
  * Returns a root of KDTree build from list of points with Split Method method
  */
 KDNode* buildFromPoints(SPPoint** points, SPLIT_METHOD method, int Size);
+
+void KNNFromTree(KDNode* KDTree, SPPoint* pnt, SPBPQueue* ret);
 #endif /* KDTREE_H_ */
 
