@@ -1,5 +1,5 @@
 CC = gcc
-OBJS = sp_KD_tree_and_array_test.o KDTree.o
+OBJS = sp_KD_tree_and_array_test.o KDTree.o SPPoint.o SPConfig.o SPBPriorityQueue.o
 EXEC = sp_KD_tree_and_array_test
 TESTS_DIR = ./unit_tests
 COMP_FLAG = -std=c99 -Wall -Wextra \
@@ -7,11 +7,18 @@ COMP_FLAG = -std=c99 -Wall -Wextra \
 
 $(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@
-#sp_KD_tree_and_array_test.o: $(TESTS_DIR)/sp_KD_tree_and_array_test.c $(TESTS_DIR)/unit_test_util.h KDTree.h
-#	$(CC) $(COMP_FLAG) -c $(TESTS_DIR)/$*.c
-sp_KD_tree_and_array_test.o: $(TESTS_DIR)/sp_KD_tree_and_array_test.c $(TESTS_DIR)/unit_test_util.h KDTree.h
+sp_KD_tree_and_array_test.o: $(TESTS_DIR)/sp_KD_tree_and_array_test.c KDTree.h SPBPriorityQueue.h SPPoint.h SPConfig.h SPLogger.h KNN.h unit_test_util.h
 	$(CC) $(COMP_FLAG) -c $(TESTS_DIR)/$*.c
-KDTree.o: KDTree.c KDTree.h 
-	$(CC) $(COMP_FLAG) -c $*.c
+SPPoint.o: SPPoint.c SPPoint.h 
+	$(CC) $(C_COMP_FLAG) -c $*.c
+	
+KDTree.o: KDTree.c SPLogger.h KNN.h SPBPriorityQueue.h SPPoint.h SPConfig.h KDTree.h
+	$(CC) $(C_COMP_FLAG) -c $*.c
+	
+SPConfig.o: SPConfig.c SPConfig.h
+	$(CC) $(C_COMP_FLAG) -c $*.c
+	
+SPBPriorityQueue.o: SPBPriorityQueue.c SPBPriorityQueue.h
+	$(CC) $(C_COMP_FLAG) -c $*.c
 clean:
 	rm -f $(OBJS) $(EXEC)
