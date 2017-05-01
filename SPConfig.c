@@ -414,7 +414,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	char varName[1025];
 	char val[1025];
 	int lines = 0;
-	SPConfig config = (SPConfig)malloc(sizeof(struct sp_config_t));
+	SPConfig config = (SPConfig)calloc(1, sizeof(struct sp_config_t));
 	if(config == NULL)
 	{
 		*msg = SP_CONFIG_ALLOC_FAIL;

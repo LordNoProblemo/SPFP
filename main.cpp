@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	if (!fetch)
 	{
 		spLoggerPrintError("Extraction Failed!", __FILE__, __func__, __LINE__);
-		freeFreatures(config, features, nFeatures);
+		freeFeatures(config, features, nFeatures);
 		spLoggerDestroy();
 		spConfigDestroy(config);
 		delete imageProc;
@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 	{
 		spLoggerPrintError("Tree creation Failed!", __FILE__, __func__,
 				__LINE__);
-		freeFreatures(config, features, nFeatures);
+		freeFeatures(config, features, nFeatures);
 		spLoggerDestroy();
 		spConfigDestroy(config);
 		delete imageProc;
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 	}
 	printf("Exiting...\n");
 	destroyKDN(tree);
-	freeFreatures(config, features, nFeatures);
+	freeFeatures(config, features, nFeatures);
 	spConfigDestroy(config);
 	spLoggerDestroy();
 	delete imageProc;

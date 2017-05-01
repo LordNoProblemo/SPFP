@@ -14,7 +14,7 @@ extern "C"{
 #include "SPConfig.h"
 }
 
-void freeFreatures(SPConfig config, SPPoint*** features, int* nFeatures);
+void freeFeatures(SPConfig config, SPPoint*** features, int* nFeatures);
 
 bool extractFeatures(SPConfig config, sp::ImageProc* imageProc, SPPoint**** features, int** nFeatures);
 

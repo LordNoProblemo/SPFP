@@ -78,6 +78,10 @@ KDArray* init(SPPoint** points, int size)
 			destroyArray(ret);
 			return NULL;
 		}
+
+	}
+	for(i = 0;i<ret->d;i++)
+	{
 		int j = 0;
 		for(;j<ret->n;j++)
 			ret->indexOrdPerDim[i][j] = j;
@@ -152,6 +156,9 @@ KDArray** split(KDArray* KDA, int coor)
 	{
 		ret[0]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size1);
 		ret[1]->indexOrdPerDim[i] = (int*)malloc(sizeof(int)*size2);
+	}
+	for(i=0;i<d;i++)
+	{
 		if(ret[0]->indexOrdPerDim[i]==NULL || ret[1]->indexOrdPerDim[i] == NULL)
 		{
 			spLoggerPrintError("Error while trying to allocating data for KDArray",__FILE__,__func__,__LINE__);

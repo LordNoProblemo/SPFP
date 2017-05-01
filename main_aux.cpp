@@ -9,14 +9,12 @@ void DestroySPP2Pointers(SPPoint** points, int size)
 	free(points);
 }
 
-void freeFreatures(SPConfig config, SPPoint*** features, int* nFeatures)
+void freeFeatures(SPConfig config, SPPoint*** features, int* nFeatures)
 {
 	SP_CONFIG_MSG msg;
 	int numOfImages = spConfigGetNumOfImages(config, &msg);
 	for (int i = 0; i < numOfImages; i++)
 	{
-		if (features[i] == NULL)
-			continue;
 		for (int j = 0; j < nFeatures[i]; j++)
 			spPointDestroy(features[i][j]);
 		free(features[i]);
@@ -163,7 +161,7 @@ int readFeatures(char* imageName, SPPoint*** features)
 		fclose(f);
 		return -1;
 	}
-	*features = (SPPoint**) malloc(sizeof(SPPoint*) * numOfFeatures);
+	*features = (SPPoint**) calloc(numOfFeatures, sizeof(SPPoint*));
 	if (*features == NULL)
 	{
 		fclose(f);
@@ -227,14 +225,14 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc,
 				__FUNCTION__, __LINE__);
 		return false;
 	}
-	*features = (SPPoint***) malloc(sizeof(SPPoint**) * numOfImages);
+	*features = (SPPoint***) calloc(numOfImages, sizeof(SPPoint**));
 	if (*features == NULL)
 	{
 		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
 		__LINE__);
 		return false;
 	}
-	*nFeatures = (int*) malloc(sizeof(int) * numOfImages);
+	*nFeatures = (int*) calloc(numOfImages, sizeof(int));
 	if (*nFeatures == NULL)
 	{
 		spLoggerPrintError("Allocation failed!", __FILE__, __FUNCTION__,
@@ -254,14 +252,15 @@ bool fetchFeatures(SPConfig config, sp::ImageProc* imageProc,
 		}
 		SPPoint** cfeatures;
 		int numOfFeaures = readFeatures(imagePath, &cfeatures);
-		(*features)[i] = cfeatures;
-		(*nFeatures)[i] = numOfFeaures;
 		if (numOfFeaures == -1)
 		{
 			spLoggerPrintError("Error in reading features", __FILE__,
 					__FUNCTION__, __LINE__);
 			return false;
 		}
+		(*features)[i] = cfeatures;
+		(*nFeatures)[i] = numOfFeaures;
+
 	}
 
 	return true;
